@@ -41,11 +41,37 @@ Each module should have a clear, single responsibility, making it easier to main
 
 > You can use different filename, just keep the logic.
 
-##  create a github workflow associated to a branch and a PR
+##  Step 2: create a github workflow associated to a branch and a PR
 
-Create the workflow `cml.yaml`file with the following content :
+1. Get you github token : `your-account > developer setting > Token(classic)`
+2. Create the workflow `cml.yaml`file with the following content :
 
 ```yaml
+name: model-wine-quality
+on: [push]
+jobs:
+  run:
+    runs-on: [ubuntu-latest]
+    container: docker://dvcorg/cml-py3:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: cml_run
+        env:
+          repo_token: ${{ secrets.SECRET_GITHUB_TOKEN }}
+        run: |
+
+          # Your ML workflow goes here
+          pip install -r requirements.txt
+          python src/main.py
+          
+          echo "## Model metrics" > report.md
+          cat report/metrics.txt >> report.md
+          
+          echo "## Data viz" >> report.md
+          cml-publish report/feature_importance.png --md >> report.md
+          cml-publish report/residuals.png --md >> report.md
+          
+          cml-send-comment report.md
 ```
 
-Upon validation, call the branch `experiment` and describe in the PR what changed.
+Upon validation, call the branch `experiment-1` and describe in the PR what changed.
