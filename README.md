@@ -75,3 +75,15 @@ jobs:
 ```
 
 Upon validation, call the branch `experiment-1` and describe in the PR what changed.
+
+## Step 3: inspect the PR
+
+After PR inspection, you should be able to see the following report:
+
+![report](report.png)
+
+## Step 3 : Merge the PR on main branch
+
+## Step 4 : Make a change in the main file
+
+try to change the depth in the `config.py` file and push change from the UI.
